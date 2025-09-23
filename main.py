@@ -868,6 +868,9 @@ def main():
     
     # Process remaining URLs
     for i, item in enumerate(remaining_urls):
+        # Clear terminal before processing each new website
+        os.system('clear' if os.name == 'posix' else 'cls')
+        
         name = item["name"]
         website = item["website"]
         
