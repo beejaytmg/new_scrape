@@ -14,6 +14,20 @@ This tool automatically scrapes pricing data from websites and runs on GitHub Ac
    - `requirements.txt` (Python dependencies)
 
 ### 2. Configure Secrets
+
+#### For Local Development:
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+2. Edit `.env` with your actual values:
+   ```bash
+   OPENROUTER_API_KEY=your-actual-api-key-here
+   YOUR_SITE_URL=https://appsisi.com
+   YOUR_SITE_NAME=appsi
+   ```
+
+#### For GitHub Actions:
 Go to your GitHub repository → Settings → Secrets and variables → Actions
 
 Add the following repository secrets:

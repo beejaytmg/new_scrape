@@ -24,6 +24,7 @@ wheels/
 venv/
 env/
 ENV/
+.venv/
 
 # IDE
 .vscode/
@@ -42,5 +43,11 @@ Thumbs.db
 *.tmp
 *.temp
 
-# Environment variables (if you accidentally create a .env file)
+# Environment variables
 .env
+.env.local
+.env.*.local
+
+# API Keys (extra protection)
+*api*key*
+*secret*

@@ -14,7 +14,7 @@ class PricingExtractor:
     def __init__(self, openrouter_api_key: str, your_site_url: str, your_site_name: str):
         self.client = OpenAI(
             base_url="https://openrouter.ai/api/v1",
-            api_key=openrouter_api_key,
+            api_key=openrouter_api_key
         )
         self.extra_headers = {
             "HTTP-Referer": your_site_url,
@@ -781,9 +781,15 @@ def main():
     output_file = "pricing_results_with_resume.json"
 
     # Get API credentials from environment variables
-    openrouter_api_key = os.getenv('OPENROUTER_API_KEY', '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')
+    openrouter_api_key = os.getenv('OPENROUTER_API_KEY')
     your_site_url = os.getenv('YOUR_SITE_URL', 'https://appsisi.com')
     your_site_name = os.getenv('YOUR_SITE_NAME', 'appsi')
+    
+    if not openrouter_api_key:
+        print("❌ Error: OPENROUTER_API_KEY environment variable is required!")
+        print("Please set your API key as an environment variable:")
+        print("export OPENROUTER_API_KEY='your-api-key-here'")
+        return
     
     # Initialize the extractor
     extractor = PricingExtractor(
