@@ -22,10 +22,21 @@ This tool automatically scrapes pricing data from websites and runs on GitHub Ac
    ```
 2. Edit `.env` with your actual values:
    ```bash
-   OPENROUTER_API_KEY=your-actual-api-key-here
-   YOUR_SITE_URL=https://appsisi.com
-   YOUR_SITE_NAME=appsi
+   # Get your API key from: https://openrouter.ai/keys
+   OPENROUTER_API_KEY="sk-or-v1-your-actual-api-key-here"
+   YOUR_SITE_URL="https://your-website.com"
+   YOUR_SITE_NAME="Your Site Name"
    ```
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Run locally:
+   ```bash
+   python main.py
+   ```
+
+The script will automatically detect and load the `.env` file for local development.
 
 #### For GitHub Actions:
 Go to your GitHub repository → Settings → Secrets and variables → Actions
@@ -68,11 +79,14 @@ After the workflow completes:
 
 ## Features
 
+- **Smart Environment Handling**: Automatically detects local `.env` file or GitHub Actions secrets
+- **Environment Validation**: Validates all required environment variables before starting
 - **Cloud Execution**: Runs on GitHub's servers, no need to keep your laptop running
 - **Resume Capability**: Can resume from where it left off if interrupted
 - **Automatic Results**: Results are saved as artifacts and committed to repository
-- **Secure**: API keys stored as encrypted GitHub secrets
+- **Secure**: API keys stored as encrypted GitHub secrets or local `.env` file (never committed)
 - **Manual/Scheduled**: Can run on-demand or on a schedule
+- **Intelligent AI Processing**: Uses AI to find and extract pricing information from websites
 
 ## Notes
 

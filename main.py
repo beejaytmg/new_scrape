@@ -14,7 +14,7 @@ class PricingExtractor:
     def __init__(self, openrouter_api_key: str, your_site_url: str, your_site_name: str):
         self.client = OpenAI(
             base_url="https://openrouter.ai/api/v1",
-            api_key=openrouter_api_key
+            api_key=openrouter_api_key,
         )
         self.extra_headers = {
             "HTTP-Referer": your_site_url,
@@ -290,13 +290,44 @@ class PricingExtractor:
         
         return list(links)
     
+    
     def _is_sitemap_index(self, sitemap_url: str) -> bool:
-        """Check if sitemap is an index file"""
+        """Check if sitemap is an index file with better detection"""
         try:
+            # First check URL pattern for common index indicators
+            if any(pattern in sitemap_url.lower() for pattern in [
+                'sitemap_index', 'sitemap-index', 'sitemap.index', 
+                'index.xml', 'sitemap.xml/index'
+            ]):
+                return True
+            
+            # Then check content
+            response = self.session.head(sitemap_url, timeout=5)
+            if response.status_code != 200:
+                return False
+                
+            # For large files, check content-type first
+            content_type = response.headers.get('content-type', '').lower()
+            if 'xml' not in content_type:
+                return False
+            
+            # Only download and check content if necessary
             response = self.session.get(sitemap_url, timeout=5)
             content = response.content.lower()
-            return b'sitemapindex' in content or b'sitemap_index' in content
-        except:
+            
+            # Check for sitemap index indicators
+            index_indicators = [
+                b'sitemapindex',
+                b'sitemap_index', 
+                b'<sitemapindex',
+                b'<sitemapindex>',
+                b'sitemap-type="index"'
+            ]
+            
+            return any(indicator in content for indicator in index_indicators)
+            
+        except Exception as e:
+            print(f"⚠️ Error checking if sitemap is index: {e}")
             return False
     
     def _extract_nested_sitemaps(self, sitemap_index_url: str, processed_urls: set = None, depth: int = 0) -> List[str]:
@@ -658,13 +689,23 @@ class PricingExtractor:
             return {"error": f"AI analysis failed: {str(e)}"}
 
     def get_pricing_data(self, domain: str, name: str) -> Dict:
-        """Main method to get pricing data for a domain"""
+        """Main method to get pricing data for a domain with safety limits"""
         print(f"\n{'='*70}")
         print(f"🚀 ANALYZING: {name}")
         print(f"🌐 DOMAIN: {domain}")
         print(f"{'='*70}")
         
-        pricing_urls = self.find_pricing_routes(domain)
+        # Safety limit for pricing URL discovery
+        try:
+            pricing_urls = self.find_pricing_routes(domain)
+        except Exception as e:
+            print(f"❌ Error finding pricing routes: {e}")
+            return {
+                "name": name,
+                "domain": domain,
+                "error": f"Error finding pricing routes: {e}",
+                "success": False
+            }
         
         if not pricing_urls:
             return {
@@ -676,30 +717,41 @@ class PricingExtractor:
         
         print(f"✅ Found {len(pricing_urls)} potential pricing URLs")
         
+        # Limit the number of URLs to try (safety measure)
+        max_urls_to_try = 5
+        if len(pricing_urls) > max_urls_to_try:
+            print(f"⚠️ Too many URLs ({len(pricing_urls)}), limiting to first {max_urls_to_try}")
+            pricing_urls = pricing_urls[:max_urls_to_try]
+        
         for i, pricing_url in enumerate(pricing_urls):
             print(f"\n--- Attempt {i+1}/{len(pricing_urls)} ---")
             print(f"🔗 Testing: {pricing_url}")
             
-            content = self.extract_pricing_content(pricing_url)
-            
-            if "Error" in content or len(content) < 100:
-                print("❌ Content extraction failed or insufficient content")
+            try:
+                content = self.extract_pricing_content(pricing_url)
+                
+                if "Error" in content or len(content) < 100:
+                    print("❌ Content extraction failed or insufficient content")
+                    continue
+                
+                pricing_data = self.analyze_pricing_with_ai(content, pricing_url)
+                
+                if 'plans' in pricing_data and pricing_data['plans']:
+                    print(f"🎉 SUCCESS: Found {len(pricing_data['plans'])} pricing plans!")
+                    pricing_data.update({
+                        "name": name,
+                        "domain": domain,
+                        "source_url": pricing_url,
+                        "success": True,
+                        "content_length": len(content)
+                    })
+                    return pricing_data
+                else:
+                    print("❌ No valid pricing data found")
+                    
+            except Exception as e:
+                print(f"❌ Error processing URL {pricing_url}: {e}")
                 continue
-            
-            pricing_data = self.analyze_pricing_with_ai(content, pricing_url)
-            
-            if 'plans' in pricing_data and pricing_data['plans']:
-                print(f"🎉 SUCCESS: Found {len(pricing_data['plans'])} pricing plans!")
-                pricing_data.update({
-                    "name": name,
-                    "domain": domain,
-                    "source_url": pricing_url,
-                    "success": True,
-                    "content_length": len(content)
-                })
-                return pricing_data
-            else:
-                print("❌ No valid pricing data found")
         
         return {
             "name": name,
@@ -778,24 +830,15 @@ def get_remaining_urls(all_urls: List[Dict], existing_results: Dict) -> List[Dic
 def main():
     # Configuration
     csv_file_path = "urls with titles.csv"
-    output_file = "pricing_results_with_resume.json"
-
-    # Get API credentials from environment variables
-    openrouter_api_key = os.getenv('OPENROUTER_API_KEY')
-    your_site_url = os.getenv('YOUR_SITE_URL', 'https://appsisi.com')
-    your_site_name = os.getenv('YOUR_SITE_NAME', 'appsi')
-    
-    if not openrouter_api_key:
-        print("❌ Error: OPENROUTER_API_KEY environment variable is required!")
-        print("Please set your API key as an environment variable:")
-        print("export OPENROUTER_API_KEY='your-api-key-here'")
-        return
-    
+    output_file = 'pricing_results_with_resume.json'
+    OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+    YOUR_SITE_URL = os.getenv("YOUR_SITE_URL")
+    YOUR_SITE_NAME = os.getenv("YOUR_SITE_NAME")
     # Initialize the extractor
     extractor = PricingExtractor(
-        openrouter_api_key=openrouter_api_key,
-        your_site_url=your_site_url,
-        your_site_name=your_site_name
+        openrouter_api_key=OPENROUTER_API_KEY,
+        your_site_url=YOUR_SITE_URL,
+        your_site_name=YOUR_SITE_NAME
     )
     
     # Read all URLs from CSV
