@@ -47,6 +47,7 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
+.env.example
 
 # API Keys (extra protection)
 *api*key*

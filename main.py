@@ -552,22 +552,19 @@ class PricingExtractor:
             return False
     
     def _check_url_exists(self, url: str) -> bool:
-        """Check if URL exists with better error handling"""
+        """Check if URL exists with shorter timeout for faster skips"""
         try:
-            # Try HEAD first (lighter)
-            response = self.session.head(url, timeout=8, allow_redirects=True)
+            response = self.session.head(url, timeout=5, allow_redirects=True)
             if response.status_code == 200:
                 return True
         except:
             pass
-        
         try:
-            # Try GET if HEAD fails
-            response = self.session.get(url, timeout=8, allow_redirects=True)
+            response = self.session.get(url, timeout=5, allow_redirects=True)
             return response.status_code == 200
         except:
             return False
-
+        
     def extract_pricing_content(self, url: str) -> str:
         """Always return full body content, but detect if pricing indicators exist for logging."""
         try:
@@ -902,6 +899,19 @@ def main():
             save_checkpoint(output_file, results, processed_count + i + 1, total_count)
             
             print("⏳ Waiting 2 seconds...")
+            time.sleep(2)
+            
+        except Exception as e:
+            error_msg = f"Unexpected error: {str(e)}"
+            print(f"💥 CRITICAL ERROR: {error_msg}")
+            results[name] = {
+                "name": name,
+                "website": website,
+                "error": error_msg,
+                "success": False
+            }
+            # Save checkpoint even on error
+            save_checkpoint(output_file, results, processed_count + i + 1, total_count)
             time.sleep(2)
             
         except Exception as e:
