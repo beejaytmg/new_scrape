@@ -969,7 +969,7 @@ def main():
     # Configuration
     csv_file_path = "urls with titles.csv"
     output_file = 'pricing_results_with_resume_checkpoint.json'
-    XAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    XAI_API_KEY = os.getenv("OPENROUTER_API_KEY")
     YOUR_SITE_URL = os.getenv("YOUR_SITE_URL")
     YOUR_SITE_NAME = os.getenv("YOUR_SITE_NAME")
     
