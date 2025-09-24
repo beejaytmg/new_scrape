@@ -9,6 +9,7 @@ from typing import List, Dict, Optional
 import time
 import random
 import os
+from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 
 class PricingExtractor:
     def __init__(self, openrouter_api_key: str, your_site_url: str, your_site_name: str):
@@ -32,6 +33,272 @@ class PricingExtractor:
             'Upgrade-Insecure-Requests': '1',
         })
         
+        # Initialize Playwright browser (will be started when needed)
+        self.playwright = None
+        self.browser = None
+        self.context = None
+        
+    def __enter__(self):
+        """Context manager entry"""
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Context manager exit - cleanup Playwright resources"""
+        self.close_playwright()
+        
+    def close_playwright(self):
+        """Close Playwright browser and context"""
+        if self.context:
+            self.context.close()
+            self.context = None
+        if self.browser:
+            self.browser.close()
+            self.browser = None
+        if self.playwright:
+            self.playwright.stop()
+            self.playwright = None
+    
+    def init_playwright(self):
+        """Initialize Playwright browser if not already done"""
+        if not self.playwright:
+            self.playwright = sync_playwright().start()
+            self.browser = self.playwright.chromium.launch(
+                headless=True,
+                args=[
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-web-security',
+                    '--disable-features=IsolateOrigins,site-per-process',
+                    '--disable-blink-features=AutomationControlled'
+                ]
+            )
+            self.context = self.browser.new_context(
+                viewport={'width': 1920, 'height': 1080},
+                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                ignore_https_errors=True
+            )
+    
+    def extract_pricing_content(self, url: str) -> str:
+        """Extract content using Playwright for dynamic sites, fallback to requests for static"""
+        print(f"📄 Extracting content from: {url}")
+        
+        # First try with Playwright (handles dynamic content)
+        playwright_content = self._extract_with_playwright(url)
+        if playwright_content and len(playwright_content) > 100:
+            print(f"✅ Playwright extracted {len(playwright_content)} characters")
+            return playwright_content
+        
+        # Fallback to requests for static content
+        print("🔄 Playwright failed or insufficient content, trying requests...")
+        requests_content = self._extract_with_requests(url)
+        if requests_content and len(requests_content) > 100:
+            print(f"✅ Requests extracted {len(requests_content)} characters")
+            return requests_content
+        
+        return "Error: Could not extract content with either method"
+    
+    def _extract_with_playwright(self, url: str) -> str:
+        """Extract content using Playwright to handle JavaScript-rendered pages"""
+        try:
+            self.init_playwright()
+            
+            page = self.context.new_page()
+            
+            # Set up request interception to block unnecessary resources
+            def route_handler(route):
+                if route.request.resource_type in ['image', 'font', 'media']:
+                    route.abort()
+                else:
+                    route.continue_()
+            
+            page.route('**/*', route_handler)
+            
+            # Navigate to page with longer timeout for dynamic content
+            page.goto(url, wait_until='networkidle', timeout=30000)
+            
+            # Wait for potential dynamic content to load
+            page.wait_for_timeout(3000)
+            
+            # Try to find and click common "pricing" elements that might be hidden behind interactions
+            pricing_selectors = [
+                'a[href*="pricing"]',
+                'button:has-text("Pricing")',
+                '[data-testid*="pricing"]',
+                '.pricing-tab',
+                '[class*="pricing"] button'
+            ]
+            
+            for selector in pricing_selectors:
+                try:
+                    element = page.query_selector(selector)
+                    if element and element.is_visible():
+                        element.click()
+                        page.wait_for_timeout(2000)
+                        print(f"✅ Clicked pricing element: {selector}")
+                        break
+                except:
+                    continue
+            
+            # Get the full page content after potential interactions
+            content = page.content()
+            
+            # Parse with BeautifulSoup for cleanup
+            soup = BeautifulSoup(content, 'html.parser')
+            
+            # Remove unwanted elements
+            for element in soup(['script', 'style', 'nav', 'footer', 'header', 'iframe']):
+                element.decompose()
+            
+            # Try to find main content areas first
+            main_content_selectors = [
+                'main',
+                '[role="main"]',
+                '.main-content',
+                '.content',
+                '#content',
+                '.pricing',
+                '.pricing-container',
+                '.plan-cards',
+                '.price-table'
+            ]
+            
+            body_text = ""
+            for selector in main_content_selectors:
+                elements = soup.select(selector)
+                for element in elements:
+                    text = element.get_text(separator=" ", strip=True)
+                    if len(text) > len(body_text):
+                        body_text = text
+            
+            # If no specific content area found, use entire body
+            if not body_text or len(body_text) < 100:
+                body = soup.find('body')
+                if body:
+                    body_text = body.get_text(separator=" ", strip=True)
+            
+            page.close()
+            return body_text[:50000]  # Cap length
+            
+        except PlaywrightTimeoutError:
+            print(f"❌ Playwright timeout for {url}")
+            return ""
+        except Exception as e:
+            print(f"❌ Playwright error for {url}: {e}")
+            return ""
+    
+    def _extract_with_requests(self, url: str) -> str:
+        """Fallback method using requests for static content"""
+        try:
+            response = self.session.get(url, timeout=10)
+            
+            if response.status_code != 200:
+                return f"Error: HTTP {response.status_code}"
+            
+            soup = BeautifulSoup(response.content, 'html.parser')
+            
+            # Remove unwanted elements
+            for element in soup(['script', 'style', 'nav', 'footer', 'header']):
+                element.decompose()
+            
+            body = soup.find('body')
+            if not body:
+                return "Error: No body tag found"
+            
+            return body.get_text(separator=" ", strip=True)[:50000]
+            
+        except Exception as e:
+            return f"Error: {str(e)}"
+    
+    def _get_all_website_links(self, domain: str) -> List[str]:
+        """Extract all links using Playwright to handle dynamic navigation"""
+        all_links = set()
+        
+        try:
+            self.init_playwright()
+            
+            page = self.context.new_page()
+            page.goto(domain, wait_until='networkidle', timeout=30000)
+            
+            # Wait for dynamic content to load
+            page.wait_for_timeout(2000)
+            
+            # Try to find and extract links from common navigation elements
+            navigation_selectors = [
+                'nav a',
+                'header a',
+                '.navbar a',
+                '.navigation a',
+                '.menu a',
+                'footer a'
+            ]
+            
+            for selector in navigation_selectors:
+                try:
+                    links = page.query_selector_all(selector)
+                    for link in links:
+                        try:
+                            href = link.get_attribute('href')
+                            if href and not href.startswith(('javascript:', 'mailto:', 'tel:', '#')):
+                                full_url = urljoin(domain, href)
+                                if self._is_valid_url(full_url):
+                                    all_links.add(full_url)
+                        except:
+                            continue
+                except:
+                    continue
+            
+            # Also get all links from the page
+            all_a_tags = page.query_selector_all('a[href]')
+            for tag in all_a_tags:
+                try:
+                    href = tag.get_attribute('href')
+                    if href and not href.startswith(('javascript:', 'mailto:', 'tel:', '#')):
+                        full_url = urljoin(domain, href)
+                        if self._is_valid_url(full_url):
+                            all_links.add(full_url)
+                except:
+                    continue
+            
+            page.close()
+            print(f"🔗 Playwright found {len(all_links)} links")
+            
+        except Exception as e:
+            print(f"❌ Playwright link extraction failed: {e}")
+            # Fallback to requests method
+            all_links.update(self._get_links_alternative_method(domain))
+        
+        return list(all_links)
+    
+    def _check_url_exists(self, url: str) -> bool:
+        """Check if URL exists using both requests and Playwright (robust version)."""
+        headers = {"User-Agent": "Mozilla/5.0"}
+    
+        # 1. GET request first (most reliable)
+        try:
+            response = self.session.get(url, timeout=8, allow_redirects=True, headers=headers)
+            if response.status_code < 400:
+                return True
+        except Exception:
+            pass
+    
+        # 2. Playwright fallback for JS-heavy pages
+        try:
+            self.init_playwright()
+            page = self.context.new_page()
+            response = page.goto(url, wait_until='domcontentloaded', timeout=15000)
+            page.close()
+            if response and response.status and response.status < 400:
+                return True
+        except Exception:
+            pass
+    
+        # 3. HEAD request as last attempt (cheaper, but unreliable)
+        try:
+            response = self.session.head(url, timeout=5, allow_redirects=True, headers=headers)
+            return response.status_code < 400
+        except Exception:
+            return False
+            # Keep all your existing methods below (they remain the same)
     def find_pricing_routes(self, domain: str) -> List[str]:
         """Use AI to intelligently find pricing pages from a domain"""
         print(f"🔍 Using AI to find pricing routes for: {domain}")
@@ -60,59 +327,7 @@ class PricingExtractor:
         pricing_urls = self._ai_identify_pricing_links(domain, all_possible_links)
         
         return pricing_urls
-    
-    def _get_all_website_links(self, domain: str) -> List[str]:
-        """Extract all links from the website's main pages with bot avoidance"""
-        all_links = set()
-        
-        try:
-            # Start with homepage - use session with proper headers
-            print(f"🌐 Accessing homepage: {domain}")
-            response = self.session.get(domain, timeout=15)
-            
-            # Check if we got blocked
-            if response.status_code == 403 or "access denied" in response.text.lower():
-                print("❌ Website blocked access. Trying alternative approach...")
-                return self._get_links_alternative_method(domain)
-            
-            if response.status_code != 200:
-                print(f"❌ Failed to access homepage. Status: {response.status_code}")
-                return []
-                
-            soup = BeautifulSoup(response.content, 'html.parser')
-            
-            # Get all links from homepage
-            homepage_links = self._extract_links_from_page(soup, domain)
-            all_links.update(homepage_links)
-            print(f"Found {len(homepage_links)} links on homepage")
-            
-            # Also check common important pages with delays to avoid rate limiting
-            important_pages = ['/features', '/product', '/products', '/solutions', '/services', '/pricing', '/plans']
-            for page in important_pages:
-                page_url = urljoin(domain, page)
-                print(f"🔍 Checking important page: {page_url}")
-                
-                time.sleep(1)  # Be respectful
-                
-                if self._check_url_exists(page_url):
-                    try:
-                        response = self.session.get(page_url, timeout=10)
-                        if response.status_code == 200:
-                            soup = BeautifulSoup(response.content, 'html.parser')
-                            page_links = self._extract_links_from_page(soup, domain)
-                            all_links.update(page_links)
-                            print(f"Found {len(page_links)} links on {page}")
-                    except Exception as e:
-                        print(f"⚠️ Error accessing {page_url}: {e}")
-                        continue
-            
-        except Exception as e:
-            print(f"❌ Error getting website links: {e}")
-            # Try alternative method
-            return self._get_links_alternative_method(domain)
-        
-        return list(all_links)
-    
+
     def _get_links_alternative_method(self, domain: str) -> List[str]:
         """Alternative method to get links when main method fails"""
         print("🔄 Using alternative method to get links...")
@@ -470,7 +685,7 @@ class PricingExtractor:
         try:
             completion = self.client.chat.completions.create(
                 extra_headers=self.extra_headers,
-                model="x-ai/grok-4-fast:free",
+                model="x-ai/grok-code-fast-1",
                 messages=[
                     {
                         "role": "user",
@@ -550,85 +765,7 @@ class PricingExtractor:
             return True
         except:
             return False
-    
-    def _check_url_exists(self, url: str) -> bool:
-        """Check if URL exists with shorter timeout for faster skips"""
-        try:
-            response = self.session.head(url, timeout=5, allow_redirects=True)
-            if response.status_code == 200:
-                return True
-        except:
-            pass
-        try:
-            response = self.session.get(url, timeout=5, allow_redirects=True)
-            return response.status_code == 200
-        except:
-            return False
-        
-    def extract_pricing_content(self, url: str) -> str:
-        """Always return full body content, but detect if pricing indicators exist for logging."""
-        try:
-            print(f"📄 Extracting content from: {url}")
-            response = self.session.get(url, timeout=10)
-    
-            if response.status_code != 200:
-                return f"Error: HTTP {response.status_code}"
-    
-            soup = BeautifulSoup(response.content, 'html.parser')
-    
-            # Remove unwanted elements
-            for element in soup(['script', 'style', 'nav', 'footer', 'header']):
-                element.decompose()
-    
-            body = soup.find('body')
-            if not body:
-                return "Error: No body tag found"
-    
-            full_body_text = body.get_text(separator=" ", strip=True)
-    
-            # Detect pricing indicators for logging purposes
-            pricing_found = False
-    
-            # 1. Known pricing selectors
-            pricing_selectors = [
-                '.pricing', '.price', '.plan', '.subscription', '.billing',
-                '.pricing-table', '.price-table', '.plan-table',
-                '.subscription-plans', '.pricing-card', '.price-card', '.plan-card',
-                '[class*="pricing"]', '[class*="price"]', '[class*="plan"]',
-                '.product-pricing', '.package', '.tier', '.offer'
-            ]
-            for selector in pricing_selectors:
-                if soup.select_one(selector):
-                    pricing_found = True
-                    break
-    
-            # 2. Tailwind "cards" with currencies
-            if not pricing_found:
-                cards = soup.select('div[class*="border-"]')
-                for card in cards:
-                    if any(currency in card.get_text() for currency in ['PLN', '$', '€', '£']):
-                        pricing_found = True
-                        break
-    
-            # 3. Regex price detection
-            if not pricing_found:
-                if re.search(r'(?:\d+[.,]?\d*\s?(?:PLN|\$|€|£))', full_body_text):
-                    pricing_found = True
-    
-            # Log detection result
-            if pricing_found:
-                print(f"✅ Pricing indicators detected. Returning full body text ({len(full_body_text)} chars).")
-            else:
-                print(f"⚠️ No obvious pricing indicators found, returning full body text anyway ({len(full_body_text)} chars).")
-    
-            # Always return the full body text (capped to 50k chars)
-            return full_body_text[:50000]
-    
-        except Exception as e:
-            error_msg = f"Error extracting content: {str(e)}"
-            print(f"❌ {error_msg}")
-            return error_msg
-        
+
     def analyze_pricing_with_ai(self, content: str, url: str) -> Dict:
         """Use AI to analyze pricing content and return structured JSON"""
         print("🧠 Analyzing pricing content with AI...")
@@ -666,7 +803,7 @@ class PricingExtractor:
         try:
             completion = self.client.chat.completions.create(
                 extra_headers=self.extra_headers,
-                model="x-ai/grok-4-fast:free",
+                model="x-ai/grok-code-fast-1",
                 messages=[
                     {
                         "role": "user",
@@ -827,137 +964,138 @@ def get_remaining_urls(all_urls: List[Dict], existing_results: Dict) -> List[Dic
 def main():
     # Configuration
     csv_file_path = "urls with titles.csv"
-    output_file = 'pricing_results_with_resume.json'
+    output_file = 'pricing_results_with_resume_checkpoint.json'
     OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
     YOUR_SITE_URL = os.getenv("YOUR_SITE_URL")
     YOUR_SITE_NAME = os.getenv("YOUR_SITE_NAME")
-    # Initialize the extractor
-    extractor = PricingExtractor(
+    
+    # Use context manager to ensure proper cleanup
+    with PricingExtractor(
         openrouter_api_key=OPENROUTER_API_KEY,
         your_site_url=YOUR_SITE_URL,
         your_site_name=YOUR_SITE_NAME
-    )
-    
-    # Read all URLs from CSV
-    all_urls = read_urls_from_csv(csv_file_path)
-    if not all_urls:
-        print("❌ No URLs found in CSV file!")
-        return
-    
-    # Load existing results and checkpoint
-    existing_results = load_existing_results(output_file)
-    checkpoint = load_checkpoint(output_file)
-    
-    if checkpoint and checkpoint.get('results'):
-        # Resume from checkpoint
-        results = checkpoint['results']
-        processed_count = checkpoint['processed_count']
-        remaining_urls = get_remaining_urls(all_urls, results)
-        print(f"🔄 Resuming processing: {len(remaining_urls)} URLs remaining")
-    else:
-        # Start fresh
-        results = existing_results
-        remaining_urls = get_remaining_urls(all_urls, results)
-        processed_count = len(results)
-        print(f"🆕 Starting fresh: {len(remaining_urls)} URLs to process")
-    
-    total_count = len(all_urls)
-    successful_count = sum(1 for result in results.values() if result.get('success'))
-    
-    print(f"\n📊 Progress: {processed_count}/{total_count} processed, {successful_count} successful")
-    
-    # Process remaining URLs
-    for i, item in enumerate(remaining_urls):
-        # Clear terminal before processing each new website
-        os.system('clear' if os.name == 'posix' else 'cls')
+    ) as extractor:
         
-        name = item["name"]
-        website = item["website"]
+        # Read all URLs from CSV
+        all_urls = read_urls_from_csv(csv_file_path)
+        if not all_urls:
+            print("❌ No URLs found in CSV file!")
+            return
+          # Load existing results and checkpoint
+        existing_results = load_existing_results(output_file)
+        checkpoint = load_checkpoint(output_file)
         
-        print(f"\n{'#'*80}")
-        print(f"🔄 PROCESSING {processed_count + i + 1}/{total_count}: {name}")
-        print(f"{'#'*80}")
+        if checkpoint and checkpoint.get('results'):
+            # Resume from checkpoint
+            results = checkpoint['results']
+            processed_count = checkpoint['processed_count']
+            remaining_urls = get_remaining_urls(all_urls, results)
+            print(f"🔄 Resuming processing: {len(remaining_urls)} URLs remaining")
+        else:
+            # Start fresh
+            results = existing_results
+            remaining_urls = get_remaining_urls(all_urls, results)
+            processed_count = len(results)
+            print(f"🆕 Starting fresh: {len(remaining_urls)} URLs to process")
         
-        if not website or website.strip() == "":
-            print("❌ Skipping empty URL")
-            results[name] = {"error": "Empty URL", "success": False}
-            # Save checkpoint even for skipped items
-            save_checkpoint(output_file, results, processed_count + i + 1, total_count)
-            continue
+        total_count = len(all_urls)
+        successful_count = sum(1 for result in results.values() if result.get('success'))
         
-        try:
-            if not website.startswith(('http://', 'https://')):
-                website = 'https://' + website
+        print(f"\n📊 Progress: {processed_count}/{total_count} processed, {successful_count} successful")
+        
+        # Process remaining URLs
+        for i, item in enumerate(remaining_urls):
+            # Clear terminal before processing each new website
+            os.system('clear' if os.name == 'posix' else 'cls')
             
-            pricing_data = extractor.get_pricing_data(website, name)
-            results[name] = pricing_data
+            name = item["name"]
+            website = item["website"]
             
-            if pricing_data.get('success'):
-                successful_count += 1
-                print(f"✅ SUCCESS: {name}")
-            else:
-                print(f"❌ FAILED: {name}")
+            print(f"\n{'#'*80}")
+            print(f"🔄 PROCESSING {processed_count + i + 1}/{total_count}: {name}")
+            print(f"{'#'*80}")
             
-            # Save checkpoint after each successful processing
-            save_checkpoint(output_file, results, processed_count + i + 1, total_count)
+            if not website or website.strip() == "":
+                print("❌ Skipping empty URL")
+                results[name] = {"error": "Empty URL", "success": False}
+                # Save checkpoint even for skipped items
+                save_checkpoint(output_file, results, processed_count + i + 1, total_count)
+                continue
             
-            print("⏳ Waiting 2 seconds...")
-            time.sleep(2)
-            
-        except Exception as e:
-            error_msg = f"Unexpected error: {str(e)}"
-            print(f"💥 CRITICAL ERROR: {error_msg}")
-            results[name] = {
-                "name": name,
-                "website": website,
-                "error": error_msg,
-                "success": False
-            }
-            # Save checkpoint even on error
-            save_checkpoint(output_file, results, processed_count + i + 1, total_count)
-            time.sleep(2)
-            
-        except Exception as e:
-            error_msg = f"Unexpected error: {str(e)}"
-            print(f"💥 CRITICAL ERROR: {error_msg}")
-            results[name] = {
-                "name": name,
-                "website": website,
-                "error": error_msg,
-                "success": False
-            }
-            # Save checkpoint even on error
-            save_checkpoint(output_file, results, processed_count + i + 1, total_count)
-            time.sleep(2)
+            try:
+                if not website.startswith(('http://', 'https://')):
+                    website = 'https://' + website
+                
+                pricing_data = extractor.get_pricing_data(website, name)
+                results[name] = pricing_data
+                
+                if pricing_data.get('success'):
+                    successful_count += 1
+                    print(f"✅ SUCCESS: {name}")
+                else:
+                    print(f"❌ FAILED: {name}")
+                
+                # Save checkpoint after each successful processing
+                save_checkpoint(output_file, results, processed_count + i + 1, total_count)
+                
+                print("⏳ Waiting 2 seconds...")
+                time.sleep(2)
+                
+            except Exception as e:
+                error_msg = f"Unexpected error: {str(e)}"
+                print(f"💥 CRITICAL ERROR: {error_msg}")
+                results[name] = {
+                    "name": name,
+                    "website": website,
+                    "error": error_msg,
+                    "success": False
+                }
+                # Save checkpoint even on error
+                save_checkpoint(output_file, results, processed_count + i + 1, total_count)
+                time.sleep(2)
+                
+            except Exception as e:
+                error_msg = f"Unexpected error: {str(e)}"
+                print(f"💥 CRITICAL ERROR: {error_msg}")
+                results[name] = {
+                    "name": name,
+                    "website": website,
+                    "error": error_msg,
+                    "success": False
+                }
+                # Save checkpoint even on error
+                save_checkpoint(output_file, results, processed_count + i + 1, total_count)
+                time.sleep(2)
+        
+        # Save final results
+        with open(output_file, 'w', encoding='utf-8') as f:
+            json.dump(results, f, indent=2, ensure_ascii=False)
+        
+        # Clean up checkpoint file after successful completion
+        checkpoint_file = output_file.replace('.json', '_checkpoint.json')
+        if os.path.exists(checkpoint_file):
+            try:
+                os.remove(checkpoint_file)
+                print("🧹 Checkpoint file cleaned up")
+            except:
+                pass
+        
+        print(f"\n{'='*80}")
+        print(f"🎊 PROCESSING COMPLETE!")
+        print(f"📊 Total: {len(results)}, ✅ Successful: {successful_count}, ❌ Failed: {len(results) - successful_count}")
+        print(f"💾 Final results saved to: {output_file}")
+        print(f"{'='*80}")
+        
+        # Print failed items summary
+        failed_items = {name: result for name, result in results.items() if not result.get('success')}
+        if failed_items:
+            print(f"\n📋 Failed items ({len(failed_items)}):")
+            for name, result in failed_items.items():
+                print(f"   - {name}: {result.get('error', 'Unknown error')}")
+        
+        return results
+        
     
-    # Save final results
-    with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(results, f, indent=2, ensure_ascii=False)
-    
-    # Clean up checkpoint file after successful completion
-    checkpoint_file = output_file.replace('.json', '_checkpoint.json')
-    if os.path.exists(checkpoint_file):
-        try:
-            os.remove(checkpoint_file)
-            print("🧹 Checkpoint file cleaned up")
-        except:
-            pass
-    
-    print(f"\n{'='*80}")
-    print(f"🎊 PROCESSING COMPLETE!")
-    print(f"📊 Total: {len(results)}, ✅ Successful: {successful_count}, ❌ Failed: {len(results) - successful_count}")
-    print(f"💾 Final results saved to: {output_file}")
-    print(f"{'='*80}")
-    
-    # Print failed items summary
-    failed_items = {name: result for name, result in results.items() if not result.get('success')}
-    if failed_items:
-        print(f"\n📋 Failed items ({len(failed_items)}):")
-        for name, result in failed_items.items():
-            print(f"   - {name}: {result.get('error', 'Unknown error')}")
-    
-    return results
-
 if __name__ == "__main__":
     try:
         results = main()
