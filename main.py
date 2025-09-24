@@ -12,10 +12,13 @@ import os
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 
 class PricingExtractor:
-    def __init__(self, openrouter_api_key: str, your_site_url: str, your_site_name: str):
+    def __init__(self, xai_api_key: str = None, your_site_url: str = "https://example.com", your_site_name: str = "PricingExtractor"):
+        
+        api_key = xai_api_key
+        
         self.client = OpenAI(
-            base_url="https://openrouter.ai/api/v1",
-            api_key=openrouter_api_key,
+            api_key=api_key,
+            base_url="https://api.x.ai/v1",  # The xAI API endpoint
         )
         self.extra_headers = {
             "HTTP-Referer": your_site_url,
@@ -684,13 +687,10 @@ class PricingExtractor:
         
         try:
             completion = self.client.chat.completions.create(
-                extra_headers=self.extra_headers,
-                model="x-ai/grok-code-fast-1",
+                model="grok-code-fast-1",  # Use the Grok model directly
                 messages=[
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
+                    {"role": "system", "content": "You are a helpful assistant that analyzes websites to identify pricing pages."},
+                    {"role": "user", "content": prompt}
                 ]
             )
             
@@ -802,13 +802,10 @@ class PricingExtractor:
         
         try:
             completion = self.client.chat.completions.create(
-                extra_headers=self.extra_headers,
-                model="x-ai/grok-code-fast-1",
+                model="grok-code-fast-1",  # Use the Grok model directly
                 messages=[
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
+                    {"role": "system", "content": "You are a helpful assistant that analyzes pricing content and extracts structured pricing information."},
+                    {"role": "user", "content": prompt}
                 ]
             )
             
@@ -972,13 +969,13 @@ def main():
     # Configuration
     csv_file_path = "urls with titles.csv"
     output_file = 'pricing_results_with_resume_checkpoint.json'
-    OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+    XAI_API_KEY = os.getenv("OPENAI_API_KEY")
     YOUR_SITE_URL = os.getenv("YOUR_SITE_URL")
     YOUR_SITE_NAME = os.getenv("YOUR_SITE_NAME")
     
     # Use context manager to ensure proper cleanup
     with PricingExtractor(
-        openrouter_api_key=OPENROUTER_API_KEY,
+        xai_api_key=XAI_API_KEY,
         your_site_url=YOUR_SITE_URL,
         your_site_name=YOUR_SITE_NAME
     ) as extractor:
