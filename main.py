@@ -917,8 +917,15 @@ def load_existing_results(output_file: str) -> Dict:
     if os.path.exists(output_file):
         try:
             with open(output_file, 'r', encoding='utf-8') as f:
-                results = json.load(f)
-            print(f"📁 Loaded existing results with {len(results)} items")
+                data = json.load(f)
+            
+            # Check if this is a checkpoint file with nested structure
+            if isinstance(data, dict) and 'results' in data:
+                results = data['results']
+                print(f"📁 Loaded existing results from checkpoint with {len(results)} items")
+            else:
+                results = data
+                print(f"📁 Loaded existing results with {len(results)} items")
             return results
         except Exception as e:
             print(f"❌ Error loading existing results: {e}")
