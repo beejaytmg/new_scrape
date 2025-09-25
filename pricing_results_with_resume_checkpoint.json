@@ -98388,9 +98388,439 @@
       "source_url": "https://www.limbuscode.com/subs-imp-yt",
       "success": true,
       "content_length": 1087
+    },
+    "YouTube™ Binaural Retuner": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "Monthly",
+          "description": "Re-Tune YouTube or Apple Music Infuse Any track With Binaural Beats",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 9.99,
+              "currency": "usd",
+              "features": [
+                "Re-Tune YouTube or Apple Music",
+                "Infuse Any track With Binaural Beats"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Yearly",
+          "description": "Re-Tune YouTube or Apple Music Infuse Any track With Binaural Beats",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "yearly",
+              "price": 99.99,
+              "currency": "usd",
+              "features": [
+                "Re-Tune YouTube or Apple Music",
+                "Infuse Any track With Binaural Beats"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Lifetime",
+          "description": "Re-Tune YouTube or Apple Music Infuse Any track With Binaural Beats",
+          "pricing_tiers": [
+            {
+              "type": "one_time",
+              "usage_type": "licensed",
+              "billing_period": null,
+              "price": 299.99,
+              "currency": "usd",
+              "features": [
+                "Re-Tune YouTube or Apple Music",
+                "Infuse Any track With Binaural Beats"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "YouTube™ Binaural Retuner",
+      "domain": "https://binauralretuner.com",
+      "source_url": "https://binauralretuner.com/pricing/",
+      "success": true,
+      "content_length": 857
+    },
+    "NFT SCAM BLOCKER": {
+      "name": "NFT SCAM BLOCKER",
+      "domain": "https://mynftalerts.com",
+      "error": "No pricing pages found",
+      "success": false
+    },
+    "Berries AI Extension": {
+      "name": "Berries AI Extension",
+      "domain": "https://heyberries.com",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://heyberries.com/",
+        "https://heyberries.com/#pricing",
+        "https://heyberries.com/old-home#pricing"
+      ],
+      "success": false
+    },
+    "PeopleX": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "STANDARD",
+          "description": "Create your campaigns and interact with People through the email channel.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 0.0,
+              "currency": "usd",
+              "features": []
+            }
+          ]
+        },
+        {
+          "name": "ADVANCED",
+          "description": "Track, automate and integrate your campaigns across multiple channels, with the My PhishX + PhishX API.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 0.0,
+              "currency": "usd",
+              "features": []
+            }
+          ]
+        },
+        {
+          "name": "PREMIUM",
+          "description": "Everything you need to create, automate, manage, and integrate your simulation, communication, governance, privacy, and compliance campaigns, as well as PhishX Assistant intelligence.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 0.0,
+              "currency": "usd",
+              "features": []
+            }
+          ]
+        }
+      ],
+      "name": "PeopleX",
+      "domain": "https://phishx.io",
+      "source_url": "https://www.phishx.io/plans",
+      "success": true,
+      "content_length": 696
+    },
+    "Bookmarks": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "Premium Plan",
+          "description": "Help support development and get access to great extra resources.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 2.49,
+              "currency": "usd",
+              "features": [
+                "Unlimited Links",
+                "Artificial Intelligence"
+              ]
+            },
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "yearly",
+              "price": 24.99,
+              "currency": "usd",
+              "features": [
+                "Unlimited Links",
+                "Artificial Intelligence"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "Bookmarks",
+      "domain": "https://mybookmarks.click",
+      "source_url": "https://mybookmarks.click/#pricing",
+      "success": true,
+      "content_length": 2803
+    },
+    "InstaPilot": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "Monthly",
+          "description": "Full automation tools All filters & scraping Unlimited media queue Free updates Email support",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 9.99,
+              "currency": "usd",
+              "features": [
+                "Full automation tools",
+                "All filters & scraping",
+                "Unlimited media queue",
+                "Free updates",
+                "Email support"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Yearly",
+          "description": "Best Value Everything in Monthly Save 25% vs. monthly Priority support Free updates Email support",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "yearly",
+              "price": 99.0,
+              "currency": "usd",
+              "features": [
+                "Full automation tools",
+                "All filters & scraping",
+                "Unlimited media queue",
+                "Free updates",
+                "Email support",
+                "Priority support"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Lifetime",
+          "description": "One-Time All premium features forever Free updates included Priority support Free updates Email support",
+          "pricing_tiers": [
+            {
+              "type": "one-time",
+              "usage_type": "licensed",
+              "billing_period": "lifetime",
+              "price": 199.0,
+              "currency": "usd",
+              "features": [
+                "Full automation tools",
+                "All filters & scraping",
+                "Unlimited media queue",
+                "Free updates",
+                "Email support",
+                "Priority support"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "InstaPilot",
+      "domain": "https://instapilot.pro/",
+      "source_url": "https://instapilot.pro/",
+      "success": true,
+      "content_length": 10588
+    },
+    "BoostLoop": {
+      "name": "BoostLoop",
+      "domain": "https://aetas.top",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://aetas.top"
+      ],
+      "success": false
+    },
+    "EngageAlot": {
+      "name": "EngageAlot",
+      "domain": "https://engagealot.com",
+      "error": "No pricing pages found",
+      "success": false
+    },
+    "My Prompt Pal": {
+      "name": "My Prompt Pal",
+      "domain": "https://promptzilla.xyz",
+      "error": "No pricing pages found",
+      "success": false
+    },
+    "NeuroQuest AI": {
+      "name": "NeuroQuest AI",
+      "domain": "https://neuroquest.ai",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://neuroquest.ai",
+        "https://neuroquest.ai/index.html",
+        "https://chromewebstore.google.com/detail/neuroquest-ai/pnbnjpglopplnphddgnoojllcfjbhghi"
+      ],
+      "success": false
+    },
+    "Amz Zip": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "FREE PLAN",
+          "description": "Start for free. Unlimited Zipcodes All main Amazon Marketplaces No automatic zipcode setting",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": null,
+              "price": 0.0,
+              "currency": "usd",
+              "features": [
+                "Unlimited Zipcodes",
+                "All main Amazon Marketplaces",
+                "No automatic zipcode setting"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "BASIC PLAN",
+          "description": "Unlimited Zipcodes All main Amazon Marketplaces Automatic zip code setting for 1 country",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 2.49,
+              "currency": "usd",
+              "features": [
+                "Unlimited Zipcodes",
+                "All main Amazon Marketplaces",
+                "Automatic zip code setting for 1 country"
+              ]
+            },
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "yearly",
+              "price": 24.9,
+              "currency": "usd",
+              "features": [
+                "Unlimited Zipcodes",
+                "All main Amazon Marketplaces",
+                "Automatic zip code setting for 1 country"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "PREMIUM PLAN",
+          "description": "Unlimited Zipcodes All main Amazon Marketplaces Automatic zip code setting for all countries",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 5.49,
+              "currency": "usd",
+              "features": [
+                "Unlimited Zipcodes",
+                "All main Amazon Marketplaces",
+                "Automatic zip code setting for all countries"
+              ]
+            },
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "yearly",
+              "price": 54.9,
+              "currency": "usd",
+              "features": [
+                "Unlimited Zipcodes",
+                "All main Amazon Marketplaces",
+                "Automatic zip code setting for all countries"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "Amz Zip",
+      "domain": "https://amzzip.com",
+      "source_url": "https://amzzip.com",
+      "success": true,
+      "content_length": 1946
+    },
+    "Braid Preamble": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "Starter",
+          "description": "250 prompts per month. For refining language and occasionally honing tone, phrasing, or grammar.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 12.0,
+              "currency": "usd",
+              "features": [
+                "Write freely",
+                "Expressive Styles",
+                "Instant Edits",
+                "Timeless Tools",
+                "Always Available"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Working",
+          "description": "1,000 prompts per month. For shaping structure and meaning and regularly revising or rewriting drafts.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 25.0,
+              "currency": "usd",
+              "features": [
+                "Write freely",
+                "Expressive Styles",
+                "Instant Edits",
+                "Timeless Tools",
+                "Always Available"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Pro",
+          "description": "2,500 prompts per month. For pushing creative boundaries and frequently engaging in heavy drafting, editing, and experimentation.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 55.0,
+              "currency": "usd",
+              "features": [
+                "Write freely",
+                "Expressive Styles",
+                "Instant Edits",
+                "Timeless Tools",
+                "Always Available"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "Braid Preamble",
+      "domain": "https://braid.digital",
+      "source_url": "https://braid.digital/",
+      "success": true,
+      "content_length": 1993
     }
   },
-  "processed_count": 2131,
+  "processed_count": 2143,
   "total_count": 4252,
-  "timestamp": 1758811653.7584262
+  "timestamp": 1758813177.7250247
 }
