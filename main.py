@@ -117,7 +117,7 @@ class PricingExtractor:
             page.route('**/*', route_handler)
             
             # Navigate to page with longer timeout for dynamic content
-            page.goto(url, wait_until='networkidle', timeout=30000)
+            page.goto(url, wait_until='networkidle', timeout=60000)  # Increased to 60s
             
             # Wait for potential dynamic content to load
             page.wait_for_timeout(3000)
@@ -691,7 +691,8 @@ class PricingExtractor:
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant that analyzes websites to identify pricing pages."},
                     {"role": "user", "content": prompt}
-                ]
+                ],
+                timeout=60  # 60 second timeout for AI calls
             )
             
             response_text = completion.choices[0].message.content
@@ -806,7 +807,8 @@ class PricingExtractor:
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant that analyzes pricing content and extracts structured pricing information."},
                     {"role": "user", "content": prompt}
-                ]
+                ],
+                timeout=60  # 60 second timeout for AI calls
             )
             
             response_text = completion.choices[0].message.content
@@ -849,7 +851,7 @@ class PricingExtractor:
         print(f"✅ Found {len(pricing_urls)} potential pricing URLs")
         
         # Limit the number of URLs to try (safety measure)
-        max_urls_to_try = 5
+        max_urls_to_try = 3  # Reduced from 5 to 3 for faster processing
         if len(pricing_urls) > max_urls_to_try:
             print(f"⚠️ Too many URLs ({len(pricing_urls)}), limiting to first {max_urls_to_try}")
             pricing_urls = pricing_urls[:max_urls_to_try]
@@ -943,6 +945,12 @@ def save_checkpoint(output_file: str, results: Dict, processed_count: int, total
         with open(checkpoint_file, 'w', encoding='utf-8') as f:
             json.dump(checkpoint_data, f, indent=2, ensure_ascii=False)
         print(f"💾 Checkpoint saved: {processed_count}/{total_count} processed")
+        
+        # In CI environments, also flush stdout to ensure progress is visible
+        if os.getenv('CI') or os.getenv('GITHUB_ACTIONS'):
+            import sys
+            sys.stdout.flush()
+            
     except Exception as e:
         print(f"❌ Error saving checkpoint: {e}")
 
@@ -1009,8 +1017,9 @@ def main():
         
         # Process remaining URLs
         for i, item in enumerate(remaining_urls):
-            # Clear terminal before processing each new website
-            os.system('clear' if os.name == 'posix' else 'cls')
+            # Don't clear terminal in CI environments to show progress
+            if not os.getenv('CI') and not os.getenv('GITHUB_ACTIONS'):
+                os.system('clear' if os.name == 'posix' else 'cls')
             
             name = item["name"]
             website = item["website"]
@@ -1030,8 +1039,20 @@ def main():
                 if not website.startswith(('http://', 'https://')):
                     website = 'https://' + website
                 
-                pricing_data = extractor.get_pricing_data(website, name)
-                results[name] = pricing_data
+                # Add timeout for individual website processing (10 minutes max per site)
+                import signal
+                
+                def timeout_handler(signum, frame):
+                    raise TimeoutError("Website processing timed out after 10 minutes")
+                
+                signal.signal(signal.SIGALRM, timeout_handler)
+                signal.alarm(600)  # 10 minutes timeout per website
+                
+                try:
+                    pricing_data = extractor.get_pricing_data(website, name)
+                    results[name] = pricing_data
+                finally:
+                    signal.alarm(0)  # Cancel the alarm
                 
                 if pricing_data.get('success'):
                     successful_count += 1
@@ -1039,10 +1060,29 @@ def main():
                 else:
                     print(f"❌ FAILED: {name}")
                 
+                # Print detailed progress in CI environments
+                if os.getenv('CI') or os.getenv('GITHUB_ACTIONS'):
+                    print(f"📊 PROGRESS UPDATE: {processed_count + i + 1}/{total_count} complete, {successful_count} successful")
+                    import sys
+                    sys.stdout.flush()
+                
                 # Save checkpoint after each successful processing
                 save_checkpoint(output_file, results, processed_count + i + 1, total_count)
                 
                 print("⏳ Waiting 2 seconds...")
+                time.sleep(2)
+                
+            except TimeoutError as e:
+                error_msg = f"Processing timeout: {str(e)}"
+                print(f"⏰ TIMEOUT ERROR: {error_msg}")
+                results[name] = {
+                    "name": name,
+                    "website": website,
+                    "error": error_msg,
+                    "success": False
+                }
+                # Save checkpoint even on timeout
+                save_checkpoint(output_file, results, processed_count + i + 1, total_count)
                 time.sleep(2)
                 
             except Exception as e:
@@ -1101,10 +1141,25 @@ def main():
         
     
 if __name__ == "__main__":
+    import signal
+    import sys
+    
+    def signal_handler(signum, frame):
+        print(f"\n⚠️ Script interrupted by signal {signum}. Checkpoint should be saved.")
+        print("Run again to resume from where it stopped.")
+        sys.exit(1)
+    
+    # Handle various termination signals
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+    
     try:
         results = main()
     except KeyboardInterrupt:
         print(f"\n⚠️ Script interrupted by user. Checkpoint saved. Run again to resume.")
+    except TimeoutError as e:
+        print(f"\n⏰ Script timed out: {e}")
+        print("Checkpoint saved. Run again to resume from where it stopped.")
     except Exception as e:
         print(f"\n💥 Script crashed with error: {e}")
         print("Checkpoint saved. Run again to resume from where it stopped.")
