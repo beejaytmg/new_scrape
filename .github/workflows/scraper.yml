@@ -11,7 +11,7 @@ on:
 jobs:
   scrape-data:
     runs-on: ubuntu-latest
-    timeout-minutes: 60  # 8 hour timeout
+    timeout-minutes: 340  # 8 hour timeout
     
     env:
       TERM: xterm  # Prevent TERM environment variable warnings
