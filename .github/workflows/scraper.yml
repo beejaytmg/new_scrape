@@ -1,22 +1,19 @@
-name: Data Scraping Automation
+name: Data Scraping Automation (Quick Test)
 
 on:
-  # Run manually when triggered
   workflow_dispatch:
-  
-  # Optionally run on a schedule
-  # schedule:
-  #   - cron: '0 9 * * 1'  # Every Monday at 9 AM UTC
+
 permissions:
-  contents: write  # To push changes back to the repo
-  actions: read    # To upload artifacts
+  contents: write
+  actions: read
+
 jobs:
   scrape-data:
     runs-on: ubuntu-latest
-    timeout-minutes: 300  # 5 hour timeout
-    
+    timeout-minutes: 25  # ⏱️ Total job limited to 25 minutes
+
     env:
-      TERM: xterm  # Prevent TERM environment variable warnings
+      TERM: xterm
 
     steps:
     - name: Checkout repository
@@ -31,7 +28,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        # Install Playwright and browsers
         pip install playwright
         playwright install --with-deps
     
@@ -44,58 +40,46 @@ jobs:
         echo "Input file found, starting scraper..."
     
     - name: Run scraper with progress monitoring
+      timeout-minutes: 20  # ⏱️ Only 20 minutes for scraper step
+      continue-on-error: true
       env:
         OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         YOUR_SITE_URL: ${{ secrets.YOUR_SITE_URL }}
         YOUR_SITE_NAME: ${{ secrets.YOUR_SITE_NAME }}
         CI: true
         GITHUB_ACTIONS: true
-      timeout-minutes: 240  # 4 hour timeout for scraper step
       run: |
-        # Start progress monitoring in background
         (
           while true; do
-            sleep 300  # Every 5 minutes
+            sleep 180
             echo "=== PROGRESS CHECK $(date) ==="
-            if [ -f "pricing_results_with_resume_checkpoint.json" ]; then
-              echo "✅ Checkpoint file exists"
-              ls -la *checkpoint* || true
-            fi
-            if [ -f "pricing_results_with_resume.json" ]; then
-              echo "✅ Results file exists"
-              ls -la *results* || true
-            fi
-            echo "=== Still running... ==="
+            ls -la *checkpoint* 2>/dev/null || echo "No checkpoint yet"
+            ls -la *results* 2>/dev/null || echo "No results yet"
           done
         ) &
         
-        # Run main scraper with timeout
-        timeout 18000 python main.py || echo "Scraper completed or timed out at $(date)"
+        timeout 1200 python main.py
         
-        # Kill background progress monitor
         jobs -p | xargs -r kill || true
 
     - name: List all files for debugging
       if: always()
       run: |
         echo "=== LISTING ALL FILES ==="
-        ls -la
-        echo "=== CHECKING FOR RESULT FILES ==="
-        ls -la *results* || echo "No result files found"
-        ls -la *checkpoint* || echo "No checkpoint files found"
-
-    # ✅ Upload intermediate results immediately after scraper (regardless of success/failure)
+        ls -la || true
+    
     - name: Upload intermediate results
       uses: actions/upload-artifact@v4
-      if: always()  # Always upload, even if scraper fails or times out
+      if: always()
       with:
         name: intermediate-results-${{ github.run_number }}
         path: |
           pricing_results_with_resume.json
           pricing_results_with_resume_checkpoint.json
-        if-no-files-found: warn  # Don't fail if no files found
+        if-no-files-found: warn
     
     - name: Check output files
+      if: always()
       run: |
         if [ -f "pricing_results_with_resume.json" ]; then
           echo "✅ Main results file created"
@@ -110,24 +94,14 @@ jobs:
           echo "ℹ️ No checkpoint file (normal if completed)"
         fi
     
-    - name: Upload results as artifact
-      uses: actions/upload-artifact@v4
-      if: always()  # Upload even if previous steps failed
-      with:
-        name: scraping-results-${{ github.run_number }}
-        path: |
-          pricing_results_with_resume.json
-          pricing_results_with_resume_checkpoint.json
-        retention-days: 30
-    
     - name: Commit and push results
-      if: success()  # Only commit if scraping succeeded
+      if: always()
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add -A
         if ! git diff --cached --quiet; then
-          git commit -m "Update scraping results - $(date '+%Y-%m-%d %H:%M:%S UTC')"
+          git commit -m "Update scraping results (partial) - $(date '+%Y-%m-%d %H:%M:%S UTC')"
           git push
         else
           echo "No changes to commit"
