@@ -33,13 +33,13 @@ jobs:
     
     - name: Verify input files
       run: |
-        if [ ! -f "urls with titles.csv" ]; then
-          echo "Error: urls with titles.csv not found"
+        if [ ! -f "urls_with_titles_1.csv" ]; then
+          echo "Error: urls_with_titles_1.csv not found"
           exit 1
         fi
         echo "Input file found, starting scraper..."
     
-    - name: Run scraper with progress monitoring
+    - name: Run scraper 
       timeout-minutes: 20  # ⏱️ Only 20 minutes for scraper step
       continue-on-error: true
       env:
@@ -49,18 +49,7 @@ jobs:
         CI: true
         GITHUB_ACTIONS: true
       run: |
-        (
-          while true; do
-            sleep 180
-            echo "=== PROGRESS CHECK $(date) ==="
-            ls -la *checkpoint* 2>/dev/null || echo "No checkpoint yet"
-            ls -la *results* 2>/dev/null || echo "No results yet"
-          done
-        ) &
-        
-        timeout 1200 python main.py
-        
-        jobs -p | xargs -r kill || true
+        timeout 1500 python main.py || echo "⏳ Scraper timed out after 25 minutes"
 
     - name: List all files for debugging
       if: always()
@@ -74,21 +63,21 @@ jobs:
       with:
         name: intermediate-results-${{ github.run_number }}
         path: |
-          pricing_results_with_resume.json
-          pricing_results_with_resume_checkpoint.json
+          pricing_results_with_resume_1.json
+          pricing_results_with_resume_1_checkpoint.json
         if-no-files-found: warn
     
     - name: Check output files
       if: always()
       run: |
-        if [ -f "pricing_results_with_resume.json" ]; then
+        if [ -f "pricing_results_with_resume_1.json" ]; then
           echo "✅ Main results file created"
-          wc -l "pricing_results_with_resume.json"
+          wc -l "pricing_results_with_resume_1.json"
         else
           echo "❌ Main results file not found"
         fi
-        
-        if [ -f "pricing_results_with_resume_checkpoint.json" ]; then
+
+        if [ -f "pricing_results_with_resume_1_checkpoint.json" ]; then
           echo "✅ Checkpoint file found"
         else
           echo "ℹ️ No checkpoint file (normal if completed)"

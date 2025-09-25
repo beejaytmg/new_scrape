@@ -970,8 +970,8 @@ def get_remaining_urls(all_urls: List[Dict], existing_results: Dict) -> List[Dic
 
 def main():
     # Configuration
-    csv_file_path = "urls_with_titles_1.csv"
-    output_file = 'pricing_results_with_resume_1.json'
+    csv_file_path = "urls_with_titles_2.csv"
+    output_file = 'pricing_results_with_resume_2.json'
     XAI_API_KEY = os.getenv("OPENROUTER_API_KEY")
     YOUR_SITE_URL = os.getenv("YOUR_SITE_URL")
     YOUR_SITE_NAME = os.getenv("YOUR_SITE_NAME")
