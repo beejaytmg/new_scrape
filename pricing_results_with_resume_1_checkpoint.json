@@ -98818,9 +98818,19 @@
       "source_url": "https://braid.digital/",
       "success": true,
       "content_length": 1993
+    },
+    "LinkedIn Engagement Assistant": {
+      "name": "LinkedIn Engagement Assistant",
+      "domain": "https://vietnamcos.com",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://vietnamcos.com/",
+        "https://vietnamcos.com"
+      ],
+      "success": false
     }
   },
-  "processed_count": 2143,
+  "processed_count": 2144,
   "total_count": 4252,
-  "timestamp": 1758813177.7250247
+  "timestamp": 1758814988.0687835
 }
