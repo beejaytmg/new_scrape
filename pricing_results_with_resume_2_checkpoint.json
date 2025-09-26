@@ -32595,9 +32595,125 @@
         "https://daydrive.ua/"
       ],
       "success": false
+    },
+    "Pin GPTs - Pin Chats and Folders for ChatGPT, Claude, Gemini and DeepSeek": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "Free",
+          "description": "Cancel Anytime. Free $0",
+          "pricing_tiers": [
+            {
+              "type": "free",
+              "usage_type": "licensed",
+              "billing_period": null,
+              "price": 0.0,
+              "currency": "usd",
+              "features": [
+                "Unlimited Pins",
+                "ChatGPT, Claude, Gemini, DeepSeek Support",
+                "Integrated Sidebar",
+                "Manual File Backup",
+                "Create 3 Folders",
+                "Auto Google Drive Backup"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Plus",
+          "description": "Cancel Anytime. Plus $1/mo",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 1.0,
+              "currency": "usd",
+              "features": [
+                "Unlimited Pins",
+                "ChatGPT, Claude, Gemini, DeepSeek Support",
+                "Integrated Sidebar",
+                "Manual File Backup",
+                "Create Unlimited Folders",
+                "Auto Google Drive Backup"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Lifetime",
+          "description": "First 100 Users Only! Lifetime $50 $25",
+          "pricing_tiers": [
+            {
+              "type": "one-time",
+              "usage_type": "licensed",
+              "billing_period": null,
+              "price": 25.0,
+              "currency": "usd",
+              "features": [
+                "Unlimited Pins",
+                "ChatGPT, Claude, Gemini, DeepSeek Support",
+                "Integrated Sidebar",
+                "Manual File Backup",
+                "Create Unlimited Folders",
+                "Auto Google Drive Backup"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "Pin GPTs - Pin Chats and Folders for ChatGPT, Claude, Gemini and DeepSeek",
+      "domain": "https://pingpts.com",
+      "source_url": "https://pingpts.com/#pricing",
+      "success": true,
+      "content_length": 2994
+    },
+    "Cuemate: DeepSeek 面试助手 | 实时问题识别, 秒出答案": {
+      "currency": "cny",
+      "plans": [
+        {
+          "name": "Free Plan",
+          "description": "Free access to Cuemate AI pen test and interview assistant with stealth mode and various features.",
+          "pricing_tiers": [
+            {
+              "type": "one_time",
+              "usage_type": "licensed",
+              "billing_period": null,
+              "price": 0.0,
+              "currency": "cny",
+              "features": [
+                "AI pen test tool (screenshot to answer, supports code questions, logic tests, etc.)",
+                "AI interview tool (real-time question recognition, generates reference answers for various positions)",
+                "Stealth mode (invisible on shared screens, browsers, resistant to screen sharing, screen switching, eye tracking)",
+                "High accuracy (99.3% voice recognition, 400ms average response time)",
+                "Support for multiple languages",
+                "Uses advanced AI models (Claude Opus 4 for coding, Gemini 2.5 Flash for tests, DeepSeek V3.1 for interviews)"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "Cuemate: DeepSeek 面试助手 | 实时问题识别, 秒出答案",
+      "domain": "https://www.cuemate.net/",
+      "source_url": "https://www.cuemate.net/",
+      "success": true,
+      "content_length": 5151
+    },
+    "X Reply AI | Apex": {
+      "name": "X Reply AI | Apex",
+      "domain": "https://apexagents.ai",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://apexagents.ai/",
+        "https://apexagents.ai",
+        "https://apexagents.ai/dashboard",
+        "https://chromewebstore.google.com/detail/apex-engager/meeiimmmfknfmejhffcodhdafhmjjfcc"
+      ],
+      "success": false
     }
   },
-  "processed_count": 532,
+  "processed_count": 535,
   "total_count": 1213,
-  "timestamp": 1758864872.6873648
+  "timestamp": 1758891717.008831
 }
