@@ -10,7 +10,7 @@ permissions:
 jobs:
   scrape-data:
     runs-on: ubuntu-latest
-    timeout-minutes: 100  # ⏱️ Total job limited to 120 minutes
+    timeout-minutes: 300  # ⏱️ Total job limited to 120 minutes
 
     env:
       TERM: xterm
@@ -40,7 +40,7 @@ jobs:
         echo "Input file found, starting scraper..."
     
     - name: Run scraper 
-      timeout-minutes: 95  # ⏱️ Only 115 minutes for scraper step
+      timeout-minutes: 295  # ⏱️ Only 115 minutes for scraper step
       continue-on-error: true
       env:
         OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
@@ -49,7 +49,7 @@ jobs:
         CI: true
         GITHUB_ACTIONS: true
       run: |
-        timeout 6000 python main_failed.py || echo "⏳ Scraper timed out after 7200 seconds"
+        timeout 18000 python main_failed.py || echo "⏳ Scraper timed out after 18000 seconds"
 
     - name: List all files for debugging
       if: always()

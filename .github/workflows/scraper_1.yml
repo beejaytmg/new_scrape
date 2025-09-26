@@ -1,4 +1,4 @@
-name: Data Scraping Automation (Quick Test)
+name: Data Scraping Automation (Quick Test) 1
 
 on:
   workflow_dispatch:
