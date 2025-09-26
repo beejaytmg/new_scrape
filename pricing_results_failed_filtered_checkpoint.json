@@ -1,0 +1,61 @@
+{
+  "results": {
+    "Inscarry - 适用于Instagram的下载器": {
+      "name": "Inscarry - 适用于Instagram的下载器",
+      "domain": "https://inscarry.com",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://inscarry.com",
+        "https://inscarry.com/",
+        "https://inscarry.com/app/index.html",
+        "https://inscarry.com/extension/index.html",
+        "https://inscarry.com/shortcut/index.html",
+        "https://inscarry.com/wechat/index.html"
+      ],
+      "success": false
+    },
+    "My Web Shortcuts": {
+      "name": "My Web Shortcuts",
+      "domain": "https://browsergadgets.io",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://browsergadgets.io",
+        "https://browsergadgets.io/",
+        "https://browsergadgets.io/gadgets",
+        "https://browsergadgets.io/gadgets/mywebshortcuts",
+        "https://browsergadgets.io/auth/signup"
+      ],
+      "success": false
+    },
+    "CommentGPT: AI Comment Assistant": {
+      "name": "CommentGPT: AI Comment Assistant",
+      "domain": "https://intovation.io",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://intovation.io",
+        "https://intovation.io/",
+        "https://intovation.io/services/",
+        "https://intovation.io/services"
+      ],
+      "success": false
+    },
+    "RecorderPro": {
+      "name": "RecorderPro",
+      "domain": "https://lessontime.ai",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://lessontime.ai",
+        "https://www.lessontime.ai/",
+        "https://lessontime.ai/",
+        "https://www.lessontime.ai/smilepass",
+        "https://lessontime.ai/smilepass",
+        "https://www.lessontime.ai/datahunter3",
+        "https://lessontime.ai/datahunter3"
+      ],
+      "success": false
+    }
+  },
+  "processed_count": 4,
+  "total_count": 441,
+  "timestamp": 1758848211.6267996
+}
