@@ -5145,9 +5145,39 @@
         "https://letsfaster.com/"
       ],
       "success": false
+    },
+    "Bluesky Posts Extractor": {
+      "name": "Bluesky Posts Extractor",
+      "domain": "https://letsfaster.com",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://letsfaster.com",
+        "https://letsfaster.com/"
+      ],
+      "success": false
+    },
+    "CamFlip": {
+      "name": "CamFlip",
+      "domain": "https://camflip.net",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://camflip.net",
+        "https://camflip.net/"
+      ],
+      "success": false
+    },
+    "Copy Console": {
+      "name": "Copy Console",
+      "domain": "https://luisreinoso.dev",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://luisreinoso.dev/store/",
+        "https://luisreinoso.dev/"
+      ],
+      "success": false
     }
   },
-  "processed_count": 106,
+  "processed_count": 109,
   "total_count": 441,
-  "timestamp": 1758861755.208317
+  "timestamp": 1758891647.0224714
 }
