@@ -870,7 +870,10 @@ class PricingExtractor:
         
         print(f"✅ Found {len(pricing_urls)} potential pricing URLs")
         
-        
+        max_urls_to_try = 8
+        if len(pricing_urls) > max_urls_to_try:
+            print(f"⚠️ Too many URLs ({len(pricing_urls)}), limiting to first {max_urls_to_try}")
+            pricing_urls = pricing_urls[:max_urls_to_try]
         for i, pricing_url in enumerate(pricing_urls):
             print(f"\n--- Attempt {i+1}/{len(pricing_urls)} ---")
             print(f"🔗 Testing: {pricing_url}")
