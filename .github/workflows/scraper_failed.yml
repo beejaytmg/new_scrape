@@ -88,9 +88,14 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
+        # Ensure we are up to date before committing
+        git fetch origin main
+        git merge --strategy-option=theirs origin/main || true
+
         git add -A
         if ! git diff --cached --quiet; then
           git commit -m "Update scraping results (partial) - $(date '+%Y-%m-%d %H:%M:%S UTC')"
+          git pull --rebase origin main || true
           git push
         else
           echo "No changes to commit"

@@ -10,7 +10,7 @@ permissions:
 jobs:
   scrape-data:
     runs-on: ubuntu-latest
-    timeout-minutes: 120  # ⏱️ Total job limited to 120 minutes
+    timeout-minutes: 300  # ⏱️ Total job limited to 120 minutes
 
     env:
       TERM: xterm
@@ -40,7 +40,7 @@ jobs:
         echo "Input file found, starting scraper..."
     
     - name: Run scraper 
-      timeout-minutes: 115  # ⏱️ Only 115 minutes for scraper step
+      timeout-minutes: 295  # ⏱️ Only 115 minutes for scraper step
       continue-on-error: true
       env:
         OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
@@ -49,7 +49,7 @@ jobs:
         CI: true
         GITHUB_ACTIONS: true
       run: |
-        timeout 7200 python main.py || echo "⏳ Scraper timed out after 7200 seconds"
+        timeout 18000 python main.py || echo "⏳ Scraper timed out after 18000 seconds"
 
     - name: List all files for debugging
       if: always()
@@ -88,9 +88,14 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
+        # Ensure we are up to date before committing
+        git fetch origin main
+        git merge --strategy-option=theirs origin/main || true
+
         git add -A
         if ! git diff --cached --quiet; then
           git commit -m "Update scraping results (partial) - $(date '+%Y-%m-%d %H:%M:%S UTC')"
+          git pull --rebase origin main || true
           git push
         else
           echo "No changes to commit"
