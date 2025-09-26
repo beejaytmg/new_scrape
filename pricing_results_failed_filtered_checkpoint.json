@@ -4609,9 +4609,545 @@
       "source_url": "https://recapmate.com/buy-credits",
       "success": true,
       "content_length": 1010
+    },
+    "StartupApp by Startup Mzansi": {
+      "name": "StartupApp by Startup Mzansi",
+      "domain": "https://startupmzansi.app",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://www.startupmzansi.app/"
+      ],
+      "success": false
+    },
+    "ImageCreo": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "Basic",
+          "description": "Generate images for your website Chrome Extension Email support Up to 50 generated images/month",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 12.0,
+              "currency": "usd",
+              "features": [
+                "Generate images for your website",
+                "Chrome Extension",
+                "Email support",
+                "Up to 50 generated images/month"
+              ]
+            },
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "annual",
+              "price": 115.2,
+              "currency": "usd",
+              "features": [
+                "Generate images for your website",
+                "Chrome Extension",
+                "Email support",
+                "Up to 50 generated images/month"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Creator",
+          "description": "Generate images for your website Chrome Extension Email support Up to 120 generated images/month",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 25.0,
+              "currency": "usd",
+              "features": [
+                "Generate images for your website",
+                "Chrome Extension",
+                "Email support",
+                "Up to 120 generated images/month"
+              ]
+            },
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "annual",
+              "price": 240.0,
+              "currency": "usd",
+              "features": [
+                "Generate images for your website",
+                "Chrome Extension",
+                "Email support",
+                "Up to 120 generated images/month"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Pro",
+          "description": "Generate images for your website Chrome Extension Email support Up to 200 generated images/month",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 40.0,
+              "currency": "usd",
+              "features": [
+                "Generate images for your website",
+                "Chrome Extension",
+                "Email support",
+                "Up to 200 generated images/month"
+              ]
+            },
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "annual",
+              "price": 384.0,
+              "currency": "usd",
+              "features": [
+                "Generate images for your website",
+                "Chrome Extension",
+                "Email support",
+                "Up to 200 generated images/month"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "ImageCreo",
+      "domain": "https://imagecreo.com",
+      "source_url": "https://imagecreo.com",
+      "success": true,
+      "content_length": 456
+    },
+    "AVA AI": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "Free",
+          "description": "Get started without a credit card",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 0.0,
+              "currency": "usd",
+              "features": [
+                "10 comments per month",
+                "Choose your preferred style",
+                "Chrome extension"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Pro",
+          "description": "For professionals who want unlimited engagement tools",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 19.99,
+              "currency": "usd",
+              "features": [
+                "Unlimited comments",
+                "Choose your preferred style",
+                "Priority support via WhatsApp group",
+                "Chrome extension"
+              ]
+            },
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "daily",
+              "price": 1.0,
+              "currency": "eur",
+              "features": [
+                "One comment a day",
+                "Choose your preferred style",
+                "Chrome extension"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "AVA AI",
+      "domain": "https://linkedin-auto-comment.vercel.app/",
+      "source_url": "https://linkedin-auto-comment.vercel.app/",
+      "success": true,
+      "content_length": 2392
+    },
+    "Skoleom Studio Extension": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "Apple TV+ Subscription",
+          "description": "Stream hundreds of exclusive shows and movies, with new releases every week. Includes a 7-day free trial.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 12.99,
+              "currency": "usd",
+              "features": [
+                "Access to exclusive Apple Original shows and movies",
+                "New releases every week",
+                "Share with up to five family members"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Apple TV+ with Apple Device Purchase",
+          "description": "Included free for 3 months when purchasing an eligible Apple device.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 0.0,
+              "currency": "usd",
+              "features": [
+                "Free access for 3 months",
+                "Access to exclusive Apple Original shows and movies",
+                "New releases every week"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Apple TV+ in Apple One",
+          "description": "Included in Apple One, which bundles up to five other Apple services into a single monthly subscription.",
+          "pricing_tiers": []
+        },
+        {
+          "name": "Apple TV+ in Apple Music Student Plan",
+          "description": "Free subscription included with the Apple Music Student Plan.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 0.0,
+              "currency": "usd",
+              "features": [
+                "Free access",
+                "Access to exclusive Apple Original shows and movies",
+                "New releases every week"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "Skoleom Studio Extension",
+      "domain": "https://skoleom.com",
+      "source_url": "https://tv.apple.com/",
+      "success": true,
+      "content_length": 5165
+    },
+    "LightRead": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "Free",
+          "description": "Basic plan with limited summaries",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 0.0,
+              "currency": "usd",
+              "features": [
+                "Text summarization of highlighted text",
+                "Up to 10 summaries/day",
+                "Popup display for easy viewing",
+                "Copy to clipboard"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Pro",
+          "description": "Premium plan with unlimited features and advanced options",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 5.0,
+              "currency": "usd",
+              "features": [
+                "Unlimited summaries",
+                "Summary history",
+                "Adjustable lengths",
+                "Tone, style, & difficulty options",
+                "Priority support"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "LightRead",
+      "domain": "https://lightread.xyz",
+      "source_url": "https://lightread.xyz",
+      "success": true,
+      "content_length": 318
+    },
+    "Currency Converter": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "ProductShake Affiliate Platform",
+          "description": "Your ultimate starter kit for affiliate success! Built with Laravel, powered by Livewire 3, and enhanced with Filament 3, this dynamic platform makes it a breeze to kickstart your affiliate journey. Seamlessly manage your own affiliate store platform. Complete platform ready to go with easy affiliate product management. Includes lifetime access, version 1.2, Laravel 10, Livewire 3, Filament 3, and size 53 MB.",
+          "pricing_tiers": [
+            {
+              "type": "one-time",
+              "usage_type": "licensed",
+              "billing_period": null,
+              "price": 75.0,
+              "currency": "usd",
+              "features": [
+                "Streamline affiliate product management in one convenient hub",
+                "Monitor live weekly clicks on every product, keeping you informed",
+                "Ensure maximum visibility with SEO-friendly product listings",
+                "Organize effortlessly with endless category and sub-category options",
+                "Seamlessly integrate affiliate products into engaging blog posts",
+                "Customize templates with ease, from colors to text",
+                "Seamlessly connect with social media networks for enhanced visibility and engagement",
+                "Harness the power of Adsense and Google Analytics with simple header script integration",
+                "Effortlessly grow your audience with seamless subscriber collection and convenient export feature",
+                "One-time payment",
+                "Lifetime access",
+                "Documentation and demo access"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "Currency Converter",
+      "domain": "https://productshake.com",
+      "source_url": "https://productshake.gumroad.com/l/affiliate-store-platform",
+      "success": true,
+      "content_length": 1947
+    },
+    "DropGame.ai": {
+      "name": "DropGame.ai",
+      "domain": "https://dropgame.ai",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://dropgame.ai"
+      ],
+      "success": false
+    },
+    "TabGenius – Non-Intrusive Tab Management": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "Free",
+          "description": "Basic plan with limited features. No login required, works instantly in Chrome.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 0.0,
+              "currency": "usd",
+              "features": [
+                "Group by domain (unlimited)",
+                "Use smart filters like Old Tabs & Grouped",
+                "Try AI grouping up to 5 times per day",
+                "Use up to 10 filters (lifetime)",
+                "Select and close up to 5 tabs at once"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Pro",
+          "description": "Premium plan with unlimited features and early access.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 0.0,
+              "currency": "usd",
+              "features": [
+                "Unlimited AI grouping (topic, title, custom)",
+                "Unlimited filters & search",
+                "Bulk-select, close & move tabs",
+                "Early access to new features"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "TabGenius – Non-Intrusive Tab Management",
+      "domain": "https://tabgenius.io",
+      "source_url": "https://tabgenius.io",
+      "success": true,
+      "content_length": 1961
+    },
+    "Youtube Email Scraper": {
+      "name": "Youtube Email Scraper",
+      "domain": "https://letsfaster.com",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://letsfaster.com",
+        "https://letsfaster.com/"
+      ],
+      "success": false
+    },
+    "Slides Recorder": {
+      "name": "Slides Recorder",
+      "domain": "https://slidesrecorder.net",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://slidesrecorder.net"
+      ],
+      "success": false
+    },
+    "IG Comments Exporter": {
+      "name": "IG Comments Exporter",
+      "domain": "https://igtools.im",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://igtools.im",
+        "https://igtools.im/"
+      ],
+      "success": false
+    },
+    "Camo AI": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "Camo AI Chrome Extension",
+          "description": "The Best Way to Use AI as a Student. Our Chrome extension offers a discreet way to harness the power of AI directly within your browser. Our extension seamlessly integrates AI into your online activities without drawing attention.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 6.99,
+              "currency": "usd",
+              "features": [
+                "GPT-5 vision and text capabilities",
+                "Camo Mode - Invisible buttons and popups",
+                "Straight to the point answers",
+                "Popup can be dragged anywhere on screen",
+                "Customizable (hints, context, full-auto, auto-select)",
+                "Easy sign up and subscription management"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "Camo AI",
+      "domain": "https://camoai.co",
+      "source_url": "https://camoai.co",
+      "success": true,
+      "content_length": 1562
+    },
+    "Video Screenshot": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "Free",
+          "description": "Download Take unlimited screenshots across any website. Full resolution, without watermarks. Unlimited Screenshots No website restrictions YouTube, Netflix, Disney+, Vimeo, hulu, Max, Prime Video",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 0.0,
+              "currency": "usd",
+              "features": [
+                "Unlimited screenshots",
+                "Full resolution, without watermarks",
+                "No website restrictions",
+                "Works on YouTube, Netflix, Disney+, Vimeo, Hulu, Max, Prime Video"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Premium",
+          "description": "Everything in the free tier with some extra bonuses to help you. Everything in the free tier Can capture subtitles on select websites Auto crop black bars on widescreen content",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 2.0,
+              "currency": "usd",
+              "features": [
+                "Everything in Free",
+                "Can capture subtitles on select websites",
+                "Auto crop black bars on widescreen content"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "Video Screenshot",
+      "domain": "https://videoscreenshot.app",
+      "source_url": "https://videoscreenshot.app/",
+      "success": true,
+      "content_length": 2124
+    },
+    "Dyslexic Browser": {
+      "name": "Dyslexic Browser",
+      "domain": "https://foureyedjimmy.com",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://foureyedjimmy.com"
+      ],
+      "success": false
+    },
+    "TripAdvisor Review Exporter": {
+      "name": "TripAdvisor Review Exporter",
+      "domain": "https://letsfaster.com",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://letsfaster.com",
+        "https://letsfaster.com/"
+      ],
+      "success": false
+    },
+    "Regis AI: Coding Interviews Assistant": {
+      "name": "Regis AI: Coding Interviews Assistant",
+      "domain": "https://destilabs.com",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://destilabs.com",
+        "https://www.destilabs.com/",
+        "https://destilabs.com/",
+        "https://destilabs.com/wizard",
+        "https://www.destilabs.com/wizard"
+      ],
+      "success": false
+    },
+    "Booking Review Exporter": {
+      "name": "Booking Review Exporter",
+      "domain": "https://letsfaster.com",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://letsfaster.com",
+        "https://letsfaster.com/"
+      ],
+      "success": false
     }
   },
-  "processed_count": 89,
+  "processed_count": 106,
   "total_count": 441,
-  "timestamp": 1758856710.3269384
+  "timestamp": 1758861755.208317
 }
