@@ -81,25 +81,45 @@ class PricingExtractor:
                 ignore_https_errors=True
             )
     
+    def sync_playwright_cookies_to_requests(self):
+        """Copy cookies from Playwright browser context to requests session."""
+        if not self.context:
+            return
+    
+        try:
+            cookies = self.context.cookies()
+            jar = requests.cookies.RequestsCookieJar()
+            for cookie in cookies:
+                jar.set(
+                    cookie["name"],
+                    cookie["value"],
+                    domain=cookie.get("domain"),
+                    path=cookie.get("path", "/"),
+                )
+            self.session.cookies = jar
+            print(f"🍪 Synced {len(cookies)} cookies from Playwright to requests session")
+        except Exception as e:
+            print(f"⚠️ Failed to sync cookies: {e}")
     def extract_pricing_content(self, url: str) -> str:
-        """Extract content using Playwright for dynamic sites, fallback to requests for static"""
         print(f"📄 Extracting content from: {url}")
-        
+    
         # First try with Playwright (handles dynamic content)
         playwright_content = self._extract_with_playwright(url)
         if playwright_content and len(playwright_content) > 100:
             print(f"✅ Playwright extracted {len(playwright_content)} characters")
             return playwright_content
-        
+    
+        # 🆕 Sync cookies before switching to requests
+        self.sync_playwright_cookies_to_requests()
+    
         # Fallback to requests for static content
         print("🔄 Playwright failed or insufficient content, trying requests...")
         requests_content = self._extract_with_requests(url)
         if requests_content and len(requests_content) > 100:
             print(f"✅ Requests extracted {len(requests_content)} characters")
             return requests_content
-        
-        return "Error: Could not extract content with either method"
     
+        return "Error: Could not extract content with either method"
     def _extract_with_playwright(self, url: str) -> str:
         """Extract content using Playwright to handle JavaScript-rendered pages"""
         try:
