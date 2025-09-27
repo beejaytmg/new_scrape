@@ -1649,9 +1649,139 @@
       "source_url": "http://www.typinginstructor.com/eco_registration.php?default=1year",
       "success": true,
       "content_length": 759
+    },
+    "SuperEmotes": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "Free",
+          "description": "Sign up for free and get 51 emote slots available for use.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 0.0,
+              "currency": "usd",
+              "features": [
+                "51 free slots (uploaded, shared, personal)"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Super Emotes Plus",
+          "description": "Subscribe to unlock new features and obtain access to more emote slots.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 0.0,
+              "currency": "usd",
+              "features": [
+                "50 Uploaded Emotes",
+                "50 Shared Emotes",
+                "10 Personal Emotes",
+                "Priority Emote Approval",
+                "+2 uploaded emotes per month (up to 100 max)",
+                "+2 shared emotes per month (up to 100 max)",
+                "+2 personal emotes per month (up to 20 max)",
+                "And more coming soon"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "SuperEmotes",
+      "domain": "https://superemotes.com",
+      "source_url": "https://superemotes.com/html/faq.html",
+      "success": true,
+      "content_length": 5088
+    },
+    "LinkedLeads": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "Free Plan",
+          "description": "Free Instagram Unfollowers Tracker – No Login Required – 100% Privacy",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 0.0,
+              "currency": "usd",
+              "features": [
+                "Real-time Unfollower Detection",
+                "Detailed Follower Analytics",
+                "Instagram Follower Count",
+                "Historical Data",
+                "Bulk Unfollower Lists",
+                "Instagram Analyzer Tools",
+                "Safe & Secure",
+                "Track Recent Followers",
+                "Content Performance Analysis",
+                "Audience Quality Assessment",
+                "Growth Strategy Optimization",
+                "Competitor Analysis",
+                "Instagram Story Analytics",
+                "Hashtag Performance Analysis",
+                "Optimal Posting Time Calculator"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "LinkedLeads",
+      "domain": "https://linkedleads.app",
+      "source_url": "https://linkedleads.app",
+      "success": true,
+      "content_length": 11190
+    },
+    "PopNow Checker": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "PopMart Auto-Checker",
+          "description": "Never Miss Limited Edition Collectibles Again. Automatically monitor PopMart store pickup and delivery availability. Get instant notifications when Labubu, blind boxes, and Skull Panda are back in stock. No signup required. Works instantly.",
+          "pricing_tiers": [
+            {
+              "type": "one-time",
+              "usage_type": "licensed",
+              "billing_period": null,
+              "price": 0.0,
+              "currency": "usd",
+              "features": [
+                "Instant Notifications",
+                "Auto Add to Cart",
+                "Store Pickup & Delivery",
+                "Lightning Fast (Checks multiple items simultaneously with customizable timing intervals)",
+                "Multi-Item Tracking (Track unlimited PopMart items across all collections and series)",
+                "100% Safe & Secure (No personal data collected. Works entirely in your browser)"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "PopNow Checker",
+      "domain": "https://astraextension.store",
+      "source_url": "https://astraextension.store",
+      "success": true,
+      "content_length": 3107
+    },
+    "BestBuy Review Exporter": {
+      "name": "BestBuy Review Exporter",
+      "domain": "https://letsfaster.com",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://letsfaster.com",
+        "https://letsfaster.com/"
+      ],
+      "success": false
     }
   },
-  "processed_count": 34,
+  "processed_count": 38,
   "total_count": 315,
-  "timestamp": 1758894438.0518587
+  "timestamp": 1758932272.3611646
 }

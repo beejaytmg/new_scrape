@@ -5175,9 +5175,19 @@
         "https://luisreinoso.dev/"
       ],
       "success": false
+    },
+    "Agoda Hotel Scraper": {
+      "name": "Agoda Hotel Scraper",
+      "domain": "https://letsfaster.com",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://letsfaster.com/",
+        "https://letsfaster.com"
+      ],
+      "success": false
     }
   },
-  "processed_count": 109,
+  "processed_count": 110,
   "total_count": 441,
-  "timestamp": 1758891647.0224714
+  "timestamp": 1758932312.9408078
 }

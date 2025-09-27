@@ -2429,9 +2429,205 @@
       "source_url": "https://ui.shadcn.com",
       "success": true,
       "content_length": 2982
+    },
+    "ezSafer": {
+      "name": "ezSafer",
+      "domain": "https://ezsafer.app",
+      "error": "No pricing pages found",
+      "success": false
+    },
+    "AtomAI: Study Helper with GPT-5": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "Limited Free Plan",
+          "description": "Try out our features to see if they fit your needs.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 0.0,
+              "currency": "usd",
+              "features": [
+                "Unlimited Ask AI credits",
+                "Unlimited Question Scan credits",
+                "1 PDF Upload",
+                "Bypass AI Detection",
+                "Ultra AI",
+                "Ad-Free Experience",
+                "Faster Response Times",
+                "Priority Email Support"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Premium Plan",
+          "description": "Our most popular plan with all features unlocked. Billed yearly.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "yearly",
+              "price": 60.0,
+              "currency": "usd",
+              "features": [
+                "Unlimited Ask AI credits",
+                "Unlimited Question Scan credits",
+                "Bypass AI Detection",
+                "500 Ultra AI credits per month",
+                "PDF Upload",
+                "Ad-Free Experience",
+                "2x Faster Response Times",
+                "Priority Email Support"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Monthly Plan",
+          "description": "Pay month to month with no commitment.",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 8.0,
+              "currency": "usd",
+              "features": [
+                "Unlimited Ask AI credits",
+                "Unlimited Question Scan credits",
+                "Bypass AI Detection",
+                "500 Ultra AI credits per month",
+                "PDF Upload",
+                "Ad-Free Experience",
+                "Faster Response Times",
+                "Priority Email Support"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "AtomAI: Study Helper with GPT-5",
+      "domain": "https://getatom.ai",
+      "source_url": "https://getatom.ai/pricing",
+      "success": true,
+      "content_length": 1264
+    },
+    "EZWrite": {
+      "name": "EZWrite",
+      "domain": "https://ezwrite.xyz",
+      "error": "No pricing pages found",
+      "success": false
+    },
+    "NoCodePlus - Component library for Bubble.io": {
+      "name": "NoCodePlus - Component library for Bubble.io",
+      "domain": "https://nocodeplus.io",
+      "error": "No pricing pages found",
+      "success": false
+    },
+    "EventLibrary": {
+      "name": "EventLibrary",
+      "domain": "https://eventlibrary.io",
+      "error": "No pricing pages found",
+      "success": false
+    },
+    "Lemlinks - Link Discovery Made Easy": {
+      "name": "Lemlinks - Link Discovery Made Easy",
+      "domain": "https://pearllemongroup.com/",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://pearllemongroup.com/",
+        "https://pearllemongroup.com/all-services/",
+        "https://pearllemongroup.com/digital-marketing-services/",
+        "https://pearllemongroup.com/seo-services-in-dubai/",
+        "https://pearllemongroup.com/ppc-management-services-in-dubai/"
+      ],
+      "success": false
+    },
+    "Browser Commands": {
+      "name": "Browser Commands",
+      "domain": "https://browsercommands.com",
+      "error": "No pricing pages found",
+      "success": false
+    },
+    "IQRush Browser Extension": {
+      "name": "IQRush Browser Extension",
+      "domain": "https://iqrush.ai",
+      "error": "All URLs failed to yield valid pricing data",
+      "attempted_urls": [
+        "https://iqrush.ai",
+        "https://iqrush.ai/join-waitlist/",
+        "https://iqrush.ai/portfolio/"
+      ],
+      "success": false
+    },
+    "QuickStyle": {
+      "currency": "usd",
+      "plans": [
+        {
+          "name": "Free Version",
+          "description": "Perfect for basic styling needs!",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 0.0,
+              "currency": "usd",
+              "features": [
+                "2000 Tokens",
+                "Basic Styling Tools",
+                "Color Customization",
+                "Text Styling",
+                "position Options",
+                "Sizing Options",
+                "Flexbox Layout",
+                "Hover Effects Customization",
+                "Border Styling Options"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Style With AI Premium Version",
+          "description": "Build with unlimited features!",
+          "pricing_tiers": [
+            {
+              "type": "recurring",
+              "usage_type": "licensed",
+              "billing_period": "monthly",
+              "price": 7.99,
+              "currency": "usd",
+              "features": [
+                "Basic Styling Tools",
+                "Color Customization",
+                "Text Styling",
+                "position Options",
+                "Sizing Options",
+                "Flexbox Layout",
+                "Hover Effects Customization",
+                "Border Styling Options",
+                "All Presets / Animations",
+                "AI Style Generator",
+                "Unlimited tokens",
+                "Merge Styles",
+                "Priority Support",
+                "Early Access to New Features"
+              ]
+            }
+          ]
+        }
+      ],
+      "name": "QuickStyle",
+      "domain": "https://quick-style.netlify.app/",
+      "source_url": "https://quick-style.netlify.app/",
+      "success": true,
+      "content_length": 813
     }
   },
-  "processed_count": 39,
+  "processed_count": 48,
   "total_count": 240,
-  "timestamp": 1758893816.9683557
+  "timestamp": 1758932158.293559
 }
